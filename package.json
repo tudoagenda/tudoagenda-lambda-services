@@ -1,0 +1,31 @@
+{
+  "name": "tudoagenda-lambda-services",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx ncc build index.ts",
+    "tsc": "tsc"
+  },
+  "dependencies": {
+    "aws-lambda": "^1.0.7",
+    "aws-sdk": "^2.1388.0",
+    "aws-xray-sdk": "^3.5.0",
+    "date-fns": "^2.30.0",
+    "stripe": "^16.8.0",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.115",
+    "@types/aws-sdk": "^2.7.0",
+    "@types/date-fns": "^2.6.0",
+    "@types/node": "^20.2.5",
+    "@types/uuid": "^9.0.1",
+    "@vercel/ncc": "^0.36.1",
+    "typescript": "^5.0.4"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
