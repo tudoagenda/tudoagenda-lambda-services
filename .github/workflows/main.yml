@@ -28,4 +28,4 @@ jobs:
         run: |
           npm run build
           zip -j deploy.zip ./dist/*
-          aws lambda update-function-code --function-name=agendabela-lambda-schedule --zip-file=fileb://deploy.zip
+          aws lambda update-function-code --function-name=tudoagenda-lambda-services --zip-file=fileb://deploy.zip
