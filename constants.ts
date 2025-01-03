@@ -17,3 +17,15 @@ export const EMAIL_SUBJECT: Record<
     welcome: "Bem-vindo ao AgendaBela",
   },
 };
+
+export const EMAIL_TEMPLATE: ({
+  text,
+}: {
+  text: string;
+}) => Record<SendEmailServices, Record<SendEmailType, string>> = ({
+  text,
+}) => ({
+  agendabela: {
+    welcome: `<h3>Bem-vindo ao AgendaBela!</h3><p>${text}</p>`,
+  },
+});

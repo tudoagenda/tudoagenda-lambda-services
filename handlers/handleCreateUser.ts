@@ -4,7 +4,6 @@ import { CognitoIdentityServiceProvider, KMS } from "aws-sdk";
 interface CreateUserRequest {
   email: string;
   password: string;
-  name: string;
 }
 
 export const handleCreateUser = async (
@@ -18,9 +17,9 @@ export const handleCreateUser = async (
       };
     }
 
-    const { email, password, name }: CreateUserRequest = JSON.parse(event.body);
+    const { email, password }: CreateUserRequest = JSON.parse(event.body);
 
-    if (!email || !password || !name) {
+    if (!email || !password) {
       return {
         statusCode: 400,
         body: JSON.stringify({
@@ -54,10 +53,6 @@ export const handleCreateUser = async (
         {
           Name: "email",
           Value: email,
-        },
-        {
-          Name: "name",
-          Value: name,
         },
         {
           Name: "email_verified",
