@@ -23,7 +23,7 @@ export const handleCreateUser = async (
       return {
         statusCode: 400,
         body: JSON.stringify({
-          message: "Email, password and name are required",
+          message: "Email and password are required",
         }),
       };
     }
@@ -31,42 +31,30 @@ export const handleCreateUser = async (
     const kms = new KMS();
     const cognito = new CognitoIdentityServiceProvider();
 
-    // Decrypt the password using KMS
-    const decryptedPassword = await kms
-      .decrypt({
-        CiphertextBlob: Buffer.from(password, "base64"),
-        KeyId: process.env.KMS_KEY_ID!,
-      })
-      .promise();
+    // Check if user exists
+    try {
+      await cognito
+        .adminGetUser({
+          UserPoolId: process.env.COGNITO_USER_POOL_ID!,
+          Username: email,
+        })
+        .promise();
 
-    if (!decryptedPassword.Plaintext) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({ message: "Failed to decrypt password" }),
-      };
-    }
+      // User exists, update password
+      const decryptedPassword = await kms
+        .decrypt({
+          CiphertextBlob: Buffer.from(password, "base64"),
+          KeyId: process.env.KMS_KEY_ID!,
+        })
+        .promise();
 
-    const params = {
-      UserPoolId: process.env.COGNITO_USER_POOL_ID!,
-      Username: email,
-      UserAttributes: [
-        {
-          Name: "email",
-          Value: email,
-        },
-        {
-          Name: "email_verified",
-          Value: "true",
-        },
-      ],
-      TemporaryPassword: decryptedPassword.Plaintext.toString("utf-8"),
-      MessageAction: "SUPPRESS",
-    };
+      if (!decryptedPassword.Plaintext) {
+        return {
+          statusCode: 400,
+          body: JSON.stringify({ message: "Failed to decrypt password" }),
+        };
+      }
 
-    const result = await cognito.adminCreateUser(params).promise();
-
-    if (result.User) {
-      // Set the permanent password
       await cognito
         .adminSetUserPassword({
           UserPoolId: process.env.COGNITO_USER_POOL_ID!,
@@ -79,17 +67,78 @@ export const handleCreateUser = async (
       return {
         statusCode: 200,
         body: JSON.stringify({
-          message: "User created successfully",
+          message: "User password updated successfully",
           user: {
-            username: result.User.Username,
-            attributes: result.User.Attributes,
-            created: result.User.UserCreateDate,
+            username: email,
+            updated: new Date().toISOString(),
           },
         }),
       };
-    }
+    } catch (userError: any) {
+      // User doesn't exist, proceed with creation
+      if (userError.code === "UserNotFoundException") {
+        // Decrypt the password using KMS
+        const decryptedPassword = await kms
+          .decrypt({
+            CiphertextBlob: Buffer.from(password, "base64"),
+            KeyId: process.env.KMS_KEY_ID!,
+          })
+          .promise();
 
-    throw new Error("Failed to create user");
+        if (!decryptedPassword.Plaintext) {
+          return {
+            statusCode: 400,
+            body: JSON.stringify({ message: "Failed to decrypt password" }),
+          };
+        }
+
+        const params = {
+          UserPoolId: process.env.COGNITO_USER_POOL_ID!,
+          Username: email,
+          UserAttributes: [
+            {
+              Name: "email",
+              Value: email,
+            },
+            {
+              Name: "email_verified",
+              Value: "true",
+            },
+          ],
+          TemporaryPassword: decryptedPassword.Plaintext.toString("utf-8"),
+          MessageAction: "SUPPRESS",
+        };
+
+        const result = await cognito.adminCreateUser(params).promise();
+
+        if (result.User) {
+          // Set the permanent password
+          await cognito
+            .adminSetUserPassword({
+              UserPoolId: process.env.COGNITO_USER_POOL_ID!,
+              Username: email,
+              Password: decryptedPassword.Plaintext.toString("utf-8"),
+              Permanent: true,
+            })
+            .promise();
+
+          return {
+            statusCode: 200,
+            body: JSON.stringify({
+              message: "User created successfully",
+              user: {
+                username: result.User.Username,
+                attributes: result.User.Attributes,
+                created: result.User.UserCreateDate,
+              },
+            }),
+          };
+        }
+
+        throw new Error("Failed to create user");
+      }
+      throw userError;
+    }
   } catch (error) {
     console.error("handleCreateUser Error: ", error);
     return {
