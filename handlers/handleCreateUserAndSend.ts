@@ -26,7 +26,7 @@ export const handleCreateUserAndSend = async (
     }
 
     const password = generatePassword();
-    const encryptedPassword = await encryptPassword(generatePassword());
+    const encryptedPassword = await encryptPassword(password);
 
     const createUserEvent = {
       body: JSON.stringify({
