@@ -20,7 +20,7 @@ export const handler = async (
     default:
       return {
         statusCode: 404,
-        body: JSON.stringify({ message: "Not found" }),
+        body: JSON.stringify({ message: "Route not found" }),
       };
   }
 };
