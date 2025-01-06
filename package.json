@@ -8,6 +8,7 @@
     "tsc": "tsc"
   },
   "dependencies": {
+    "@aws-sdk/client-kms": "^3.723.0",
     "aws-lambda": "^1.0.7",
     "aws-sdk": "^2.1388.0",
     "aws-xray-sdk": "^3.5.0",

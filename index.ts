@@ -1,5 +1,9 @@
 import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from "aws-lambda";
-import { handleSendEmail } from "./handlers";
+import {
+  handleSendEmail,
+  handleCreateUserAndSend,
+  handleCreateUser,
+} from "./handlers";
 
 export const handler = async (
   event: APIGatewayProxyEventV2
@@ -9,6 +13,10 @@ export const handler = async (
   switch (event.routeKey) {
     case "POST /send-email":
       return handleSendEmail(event);
+    case "POST /create-user-and-send":
+      return handleCreateUserAndSend(event);
+    case "POST /create-user":
+      return handleCreateUser(event);
     default:
       return {
         statusCode: 404,
