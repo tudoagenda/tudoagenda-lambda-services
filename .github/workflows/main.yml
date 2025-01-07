@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  deploy_lambda:
+  test_and_deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -19,12 +19,13 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-      - name: npm install
+      - name: Install dependencies
         env:
           CI: true
-        run: |
-          npm ci
-      - name: deploy
+        run: npm ci
+      - name: Run tests
+        run: npm test
+      - name: Build and deploy
         run: |
           npm run build
           zip -j deploy.zip ./dist/*
