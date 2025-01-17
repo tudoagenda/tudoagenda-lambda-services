@@ -3,6 +3,7 @@ import {
   handleSendEmail,
   handleCreateUserAndSend,
   handleCreateUser,
+  handleSendWhatsappMessage,
 } from "./handlers";
 
 export const handler = async (
@@ -17,6 +18,8 @@ export const handler = async (
       return handleCreateUserAndSend(event);
     case "POST /create-user":
       return handleCreateUser(event);
+    case "POST /send-whatsapp-message":
+      return handleSendWhatsappMessage(event);
     default:
       return {
         statusCode: 404,
