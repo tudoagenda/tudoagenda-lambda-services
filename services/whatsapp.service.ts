@@ -9,8 +9,10 @@ export const WhatsAppService = {
         to: "5514996978287",
         type: "template",
         template: {
-          name: "hello_world",
-          language: { code: "en_US" },
+          name: "notification_sample",
+          language: {
+            code: "pt_BR",
+          },
         },
       },
       {
