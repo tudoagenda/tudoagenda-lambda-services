@@ -1,5 +1,4 @@
 import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from "aws-lambda";
-import { createErrorResponse } from "../utils/responses";
 import { WhatsAppService } from "../services/whatsapp.service";
 
 export const handleSendWhatsappMessage = async (
@@ -15,9 +14,9 @@ export const handleSendWhatsappMessage = async (
       };
     }
 
-    const { to, message } = JSON.parse(event.body);
+    const { to, content } = JSON.parse(event.body);
 
-    if (!to || !message) {
+    if (!to || !content) {
       return {
         statusCode: 400,
         body: JSON.stringify({
@@ -26,7 +25,7 @@ export const handleSendWhatsappMessage = async (
       };
     }
 
-    await WhatsAppService.sendMessage(to, message);
+    await WhatsAppService.sendAppointmentConfirmation(to, content);
 
     return {
       statusCode: 200,
