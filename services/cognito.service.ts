@@ -14,6 +14,7 @@ export class CognitoService {
       UserAttributes: [
         { Name: "email", Value: email },
         { Name: "email_verified", Value: "true" },
+        { Name: "custom:role", Value: "admin" },
       ],
       TemporaryPassword: password,
       MessageAction: "SUPPRESS",
