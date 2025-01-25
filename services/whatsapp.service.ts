@@ -1,23 +1,70 @@
 import axios from "axios";
+import { SendWhatsappMessageBody } from "../types";
 
-type AppointmentConfirmationMessageProps = {
-  salon: string;
-  date: string;
-  time: string;
-  service: string;
-  professional: string;
+type MessageParameters = {
+  type: string;
+  text: string;
 };
 
-const sendAppointmentConfirmation = async (
-  to: string,
-  {
-    salon,
-    date,
-    time,
-    service,
-    professional,
-  }: AppointmentConfirmationMessageProps
-) => {
+const WhatsappTemplate: Record<SendWhatsappMessageBody["type"], string> = {
+  "client-confirmation": "appointment_scheduled",
+  "professional-confirmation": "appointment_scheduled_professional",
+};
+
+const buildMessageBody = (
+  type: SendWhatsappMessageBody["type"],
+  content: SendWhatsappMessageBody["content"]
+): MessageParameters[] => {
+  if (type === "client-confirmation") {
+    return [
+      {
+        type: "text",
+        text: content.salon,
+      },
+      {
+        type: "text",
+        text: content.date,
+      },
+      {
+        type: "text",
+        text: content.time,
+      },
+      {
+        type: "text",
+        text: content.service,
+      },
+      {
+        type: "text",
+        text: content.name,
+      },
+    ];
+  }
+
+  return [
+    {
+      type: "text",
+      text: content.date,
+    },
+    {
+      type: "text",
+      text: content.time,
+    },
+    {
+      type: "text",
+      text: content.name,
+    },
+    {
+      type: "text",
+      text: content.service,
+    },
+  ];
+};
+
+const sendAppointmentConfirmation = async ({
+  to,
+  type,
+  content,
+}: SendWhatsappMessageBody) => {
   await axios.post(
     `https://graph.facebook.com/v21.0/${process.env.WHATSAPP_NUMBER_ID}/messages`,
     {
@@ -25,35 +72,14 @@ const sendAppointmentConfirmation = async (
       to: to,
       type: "template",
       template: {
-        name: "appointment_scheduled",
+        name: WhatsappTemplate[type],
         language: {
           code: "pt_BR",
         },
         components: [
           {
             type: "body",
-            parameters: [
-              {
-                type: "text",
-                text: salon,
-              },
-              {
-                type: "text",
-                text: date,
-              },
-              {
-                type: "text",
-                text: time,
-              },
-              {
-                type: "text",
-                text: service,
-              },
-              {
-                type: "text",
-                text: professional,
-              },
-            ],
+            parameters: buildMessageBody(type, content),
           },
         ],
       },
@@ -68,27 +94,5 @@ const sendAppointmentConfirmation = async (
 };
 
 export const WhatsAppService = {
-  sendMessage: async (to: string, message: string) => {
-    await axios.post(
-      `https://graph.facebook.com/v21.0/${process.env.WHATSAPP_NUMBER_ID}/messages`,
-      {
-        messaging_product: "whatsapp",
-        to: "5514996978287",
-        type: "template",
-        template: {
-          name: "notification_sample",
-          language: {
-            code: "pt_BR",
-          },
-        },
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.WHATSAPP_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-  },
   sendAppointmentConfirmation,
 };

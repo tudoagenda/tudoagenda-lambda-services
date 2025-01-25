@@ -1,5 +1,6 @@
 import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from "aws-lambda";
 import { WhatsAppService } from "../services/whatsapp.service";
+import { SendWhatsappMessageBody } from "../types";
 
 export const handleSendWhatsappMessage = async (
   event: APIGatewayProxyEventV2
@@ -14,18 +15,32 @@ export const handleSendWhatsappMessage = async (
       };
     }
 
-    const { to, content } = JSON.parse(event.body);
+    const { to, type, content } = JSON.parse(
+      event.body
+    ) as SendWhatsappMessageBody;
 
-    if (!to || !content) {
+    if (!to || !type || !content) {
       return {
         statusCode: 400,
         body: JSON.stringify({
-          message: "Recipient and message are required",
+          message: "Invalid request body",
         }),
       };
     }
 
-    await WhatsAppService.sendAppointmentConfirmation(to, content);
+    if (
+      type !== "client-confirmation" &&
+      type !== "professional-confirmation"
+    ) {
+      return {
+        statusCode: 400,
+        body: JSON.stringify({
+          message: "Invalid message type",
+        }),
+      };
+    }
+
+    await WhatsAppService.sendAppointmentConfirmation({ to, type, content });
 
     return {
       statusCode: 200,
