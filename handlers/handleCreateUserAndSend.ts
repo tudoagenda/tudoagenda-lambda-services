@@ -6,7 +6,7 @@ import { encryptPassword } from "../utils/encryption";
 import { createErrorResponse } from "../utils/responses";
 import { isValidEmail } from "../utils/validations";
 import { generatePassword } from "../utils/generators";
-
+import { accountCreated } from "../templates/emails/accountCreated";
 interface CreateUserAndSendBody {
   email: string;
 }
@@ -42,7 +42,7 @@ export const handleCreateUserAndSend = async (
         service: "agendabela" as SendEmailServices,
         type: "welcome" as SendEmailType,
         to: email,
-        text: `Sua conta no Agendabela foi criada com sucesso. Você pode agora acessar o sistema com seu email (${email}). Sua senha temporária é: ${password}`,
+        text: accountCreated(email, password),
       }),
     } as APIGatewayProxyEventV2;
 

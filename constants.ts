@@ -18,16 +18,6 @@ export const EMAIL_SUBJECT: Record<
   },
 };
 
-const EMAIL_HTML_DOCUMENT = (text: string) => `
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
-  <head />
-  <body>
-    ${text}
-  </body>
-</html>
-`;
-
 export const EMAIL_TEMPLATE: ({
   text,
 }: {
@@ -36,6 +26,6 @@ export const EMAIL_TEMPLATE: ({
   text,
 }) => ({
   agendabela: {
-    welcome: EMAIL_HTML_DOCUMENT(text),
+    welcome: text,
   },
 });
