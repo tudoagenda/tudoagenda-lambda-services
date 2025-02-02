@@ -23,6 +23,9 @@ export const accountCreated = (email: string, password: string): string => {
                             <p>Sua conta no <strong>Agendabela</strong> foi criada com sucesso!</p>
                             <p>Agora você pode acessar o sistema com seu e-mail: <strong>${email}</strong></p>
                             <p>Sua senha temporária é: <strong>${password}</strong></p>
+                            <a href="https://agendabela.tudoagenda.com.br?user=${email}" target="_blank" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 5px; margin: 0 auto">Clique aqui e acesse a plataforma</a>
+                            <br>
+                            <br>
                             <p>Recomendamos que altere sua senha assim que fizer login.</p>
                             <p>Se precisar de ajuda, entre em contato com o suporte.</p>
                         </td>
