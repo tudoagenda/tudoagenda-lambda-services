@@ -48,4 +48,13 @@ export class CognitoService {
       })
       .promise();
   }
+
+  async getAllUsers(paginationToken?: string) {
+    const params: CognitoIdentityServiceProvider.ListUsersRequest = {
+      UserPoolId: process.env.COGNITO_USER_POOL_ID!,
+      ...(paginationToken && { PaginationToken: paginationToken }),
+    };
+
+    return this.cognito.listUsers(params).promise();
+  }
 }

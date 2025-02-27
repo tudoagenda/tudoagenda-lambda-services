@@ -4,6 +4,7 @@ import {
   handleCreateUserAndSend,
   handleCreateUser,
   handleSendWhatsappMessage,
+  handleGetAllAgendabelaUsers,
 } from "./handlers";
 
 export const handler = async (
@@ -20,6 +21,8 @@ export const handler = async (
       return handleCreateUser(event);
     case "POST /send-whatsapp-message":
       return handleSendWhatsappMessage(event);
+    case "GET /get-all-agendabela-users":
+      return handleGetAllAgendabelaUsers(event);
     default:
       return {
         statusCode: 404,
