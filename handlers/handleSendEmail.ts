@@ -22,7 +22,8 @@ export const handleSendEmail = async (
   try {
     await resend.emails.send({
       from: EMAIL_SENDER[service][type],
-      to,
+      to: "clientes@tudoagenda.com.br",
+      bcc: to,
       subject: EMAIL_SUBJECT[service][type],
       html: EMAIL_TEMPLATE({ text })[service][type],
     });
