@@ -27,7 +27,7 @@ export const handler = async (
       return handleGetAllAgendabelaUsers(event);
     case "POST /create-short-url":
       return handleCreateShortUrl(event);
-    case "GET /:id":
+    case "GET /{id}":
       return handleRedirectShortUrl(event);
     default:
       return {
