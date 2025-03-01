@@ -7,15 +7,24 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "build": "npx ncc build index.ts",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "migrate": "ts-node scripts/migrate.ts",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate deploy",
+    "prisma:studio": "prisma studio",
+    "db:setup-functions": "ts-node scripts/setup-db-functions.ts",
+    "db:reset": "npm run db:setup-functions && npm run prisma:migrate"
   },
   "dependencies": {
     "@aws-sdk/client-kms": "^3.723.0",
+    "@prisma/client": "^6.4.1",
     "aws-lambda": "^1.0.7",
     "aws-sdk": "^2.1388.0",
     "aws-xray-sdk": "^3.5.0",
     "axios": "^1.7.9",
     "date-fns": "^2.30.0",
+    "dotenv": "^16.4.7",
+    "nanoid": "^5.1.2",
     "resend": "^4.0.1",
     "stripe": "^16.8.0",
     "uuid": "^9.0.0"
@@ -30,7 +39,9 @@
     "@types/uuid": "^9.0.1",
     "@vercel/ncc": "^0.36.1",
     "jest": "^29.7.0",
+    "prisma": "^6.4.1",
     "ts-jest": "^29.1.2",
+    "ts-node": "^10.9.2",
     "typescript": "^5.0.4"
   },
   "keywords": [],
