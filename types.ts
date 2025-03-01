@@ -3,7 +3,8 @@ export type SendEmailType =
   | "welcome"
   | "missing_profile"
   | "missing_services"
-  | "missing_appointment";
+  | "missing_appointment"
+  | "missing_professionals";
 
 export type SendEmailBody = {
   to: string[];
