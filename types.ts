@@ -1,5 +1,9 @@
 export type SendEmailServices = "agendabela";
-export type SendEmailType = "welcome";
+export type SendEmailType =
+  | "welcome"
+  | "missing_profile"
+  | "missing_services"
+  | "missing_appointment";
 
 export type SendEmailBody = {
   to: string[];
