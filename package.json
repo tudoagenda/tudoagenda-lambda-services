@@ -7,6 +7,7 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "build": "npx ncc build index.ts",
+    "build:deploy": "npm run prisma:generate && npx ncc build index.ts && node scripts/prepare-deployment.js",
     "tsc": "tsc",
     "migrate": "ts-node scripts/migrate.ts",
     "prisma:generate": "prisma generate",

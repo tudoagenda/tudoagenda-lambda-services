@@ -1,3 +1,4 @@
+import prismaClient from '../prisma-client';
 import { PrismaClient } from '@prisma/client';
 
 // Prevent multiple instances of Prisma Client in development
@@ -9,15 +10,8 @@ export class PrismaService {
   private prisma: PrismaClient;
 
   constructor() {
-    // Use existing prisma instance if available to prevent too many connections in development
-    if (process.env.NODE_ENV === 'production') {
-      this.prisma = new PrismaClient();
-    } else {
-      if (!global.prisma) {
-        global.prisma = new PrismaClient();
-      }
-      this.prisma = global.prisma;
-    }
+    // Use our preconfigured Prisma client instance
+    this.prisma = prismaClient;
   }
 
   /**

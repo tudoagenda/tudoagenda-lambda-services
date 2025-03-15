@@ -27,6 +27,6 @@ jobs:
         run: npm test
       - name: Build and deploy
         run: |
-          npm run build
-          zip -j deploy.zip ./dist/*
+          npm run build:deploy
+          cd dist && zip -r ../deploy.zip .
           aws lambda update-function-code --function-name=tudoagenda-lambda-services --zip-file=fileb://deploy.zip
