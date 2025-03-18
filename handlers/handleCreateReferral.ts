@@ -38,9 +38,7 @@ export const handleCreateReferral = async (
     const shortenedReferralLink = await axios.post('https://nduzhzdi52.execute-api.us-east-1.amazonaws.com/create-short-url', {
       url: referralLink,
     });
-    const shortUrl = (shortenedReferralLink as any).data.url;
-
-    console.log('shortUrl', shortUrl);
+    const shortUrl = (shortenedReferralLink as any).data.shortUrl;
     
     // Create a new referral in the database
     const referral = await prisma.referral.create({
