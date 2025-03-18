@@ -7,6 +7,8 @@ import {
   handleGetAllAgendabelaUsers,
   handleCreateShortUrl,
   handleRedirectShortUrl,
+  handleCreateReferral,
+  handleGetAllReferrals,
 } from "./handlers";
 
 export const handler = async (
@@ -29,6 +31,10 @@ export const handler = async (
       return handleCreateShortUrl(event);
     case "GET /{id}":
       return handleRedirectShortUrl(event);
+    case "POST /create-referral":
+      return handleCreateReferral(event);
+    case "GET /get-all-referrals":
+      return handleGetAllReferrals(event);
     default:
       return {
         statusCode: 404,

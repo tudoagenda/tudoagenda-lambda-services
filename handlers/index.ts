@@ -6,3 +6,5 @@ export { handleGetAllAgendabelaUsers } from "./handleGetAllAgendabelaUsers";
 export { handleGetShortUrl } from "./handleGetShortUrl";
 export { handleCreateShortUrl } from "./handleCreateShortUrl";
 export { handleRedirectShortUrl } from "./handleRedirectShortUrl";
+export { handleCreateReferral } from "./handleCreateReferral";
+export { handleGetAllReferrals } from "./handleGetAllReferrals";

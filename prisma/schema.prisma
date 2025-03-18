@@ -21,3 +21,14 @@ model ShortUrl {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model Referral {
+  id           String    @id @default(uuid())
+  code         String    @unique @db.Char(8)
+  userId       String
+  referralType String    @default("DEFAULT")
+  expiresAt    DateTime?
+  used         Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
