@@ -20,7 +20,7 @@ export const handleCreateReferral = async (
       return createErrorResponse(400, "Request body is required");
     }
     
-    const { email, referralType, customReferralLink, expiresAt } = JSON.parse(event.body);
+    const { email, referralType, expiresAt } = JSON.parse(event.body);
     
     if (!email) {
       return createErrorResponse(400, "Email is required");
@@ -31,6 +31,13 @@ export const handleCreateReferral = async (
     
     // Generate a referral code
     const code = generateReferralCode();
+
+    // Use the provided custom referral link or generate a default one
+    const referralLink = `https://tudoagenda.com.br/agendabela/automatize-seu-atendimento?ref=${code}`;
+    const shortenedReferralLink = await axios.post('https://nduzhzdi52.execute-api.us-east-1.amazonaws.com/create-short-url', {
+      url: referralLink,
+    });
+    const shortUrl = (shortenedReferralLink as any).data.url;
     
     // Create a new referral in the database
     const referral = await prisma.referral.create({
@@ -40,11 +47,10 @@ export const handleCreateReferral = async (
         referralType: referralType || 'DEFAULT',
         expiresAt: expiresAt ? new Date(expiresAt) : null,
         used: false,
+        shortUrl,
       },
     });
     
-    // Use the provided custom referral link or generate a default one
-    const referralLink = customReferralLink || `${process.env.APP_URL || 'https://app.tudoagenda.com'}/signup?ref=${referral.code}`;
     
     return {
       statusCode: 201,
@@ -58,6 +64,7 @@ export const handleCreateReferral = async (
         createdAt: referral.createdAt,
         updatedAt: referral.updatedAt,
         referralLink,
+        shortUrl,
       }),
     };
   } catch (error) {

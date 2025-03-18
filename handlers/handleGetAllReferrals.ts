@@ -41,7 +41,7 @@ export const handleGetAllReferrals = async (
           used: referral.used,
           createdAt: referral.createdAt,
           updatedAt: referral.updatedAt,
-          referralLink: `${process.env.APP_URL || 'https://app.tudoagenda.com'}/signup?ref=${referral.code}`,
+          shortUrl: referral.shortUrl,
         })),
       }),
     };

@@ -31,4 +31,5 @@ model Referral {
   used         Boolean   @default(false)
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
+  shortUrl     String?
 }
