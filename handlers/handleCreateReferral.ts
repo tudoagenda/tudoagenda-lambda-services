@@ -2,6 +2,7 @@ import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from "aws-lambda";
 import { PrismaService } from "../services/prisma.service";
 import { createErrorResponse } from "../utils/responses";
 import { nanoid } from 'nanoid';
+import axios from 'axios';
 
 const prismaService = new PrismaService();
 
