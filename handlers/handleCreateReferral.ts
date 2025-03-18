@@ -39,6 +39,8 @@ export const handleCreateReferral = async (
       url: referralLink,
     });
     const shortUrl = (shortenedReferralLink as any).data.url;
+
+    console.log('shortUrl', shortUrl);
     
     // Create a new referral in the database
     const referral = await prisma.referral.create({
