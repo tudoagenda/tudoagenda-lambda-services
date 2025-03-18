@@ -11,13 +11,14 @@ export const handleGetAllReferrals = async (
     // Connect to the database
     await prismaService.connect();
     
-    const { userId } = event.queryStringParameters || {};
+    const { email } = event.queryStringParameters || {};
     
     // Get the Prisma client
     const prisma = prismaService.getClient();
     
     // Set up the where clause for filtering
-    const where = userId ? { userId } : {};
+    // If email is provided, look for referrals where userId equals the email
+    const where = email ? { userId: email } : {};
     
     // Get all referrals from the database
     const referrals = await prisma.referral.findMany({
@@ -34,7 +35,7 @@ export const handleGetAllReferrals = async (
         referrals: referrals.map(referral => ({
           id: referral.id,
           code: referral.code,
-          userId: referral.userId,
+          email: referral.userId, // Since userId is now storing the email
           referralType: referral.referralType,
           expiresAt: referral.expiresAt,
           used: referral.used,

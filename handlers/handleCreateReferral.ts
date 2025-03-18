@@ -20,10 +20,10 @@ export const handleCreateReferral = async (
       return createErrorResponse(400, "Request body is required");
     }
     
-    const { userId, referralType, expiresAt } = JSON.parse(event.body);
+    const { email, referralType, customReferralLink, expiresAt } = JSON.parse(event.body);
     
-    if (!userId) {
-      return createErrorResponse(400, "User ID is required");
+    if (!email) {
+      return createErrorResponse(400, "Email is required");
     }
     
     // Get the Prisma client
@@ -36,25 +36,28 @@ export const handleCreateReferral = async (
     const referral = await prisma.referral.create({
       data: {
         code,
-        userId,
+        userId: email, // Use email as userId since we don't have a User model
         referralType: referralType || 'DEFAULT',
         expiresAt: expiresAt ? new Date(expiresAt) : null,
         used: false,
       },
     });
     
+    // Use the provided custom referral link or generate a default one
+    const referralLink = customReferralLink || `${process.env.APP_URL || 'https://app.tudoagenda.com'}/signup?ref=${referral.code}`;
+    
     return {
       statusCode: 201,
       body: JSON.stringify({
         id: referral.id,
         code: referral.code,
-        userId: referral.userId,
+        email,
         referralType: referral.referralType,
         expiresAt: referral.expiresAt,
         used: referral.used,
         createdAt: referral.createdAt,
         updatedAt: referral.updatedAt,
-        referralLink: `${process.env.APP_URL || 'https://app.tudoagenda.com'}/signup?ref=${referral.code}`,
+        referralLink,
       }),
     };
   } catch (error) {
