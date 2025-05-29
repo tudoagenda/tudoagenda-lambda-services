@@ -3,6 +3,6 @@ export const WAHA_API_BASE_URL =
 
 export const WAHA_API_URL = {
   chatting: {
-    sendMessage: `${WAHA_API_BASE_URL}/api/sendMessage`,
+    sendMessage: `${WAHA_API_BASE_URL}/api/sendText`,
   },
 };
