@@ -1,94 +1,31 @@
 import axios from "axios";
 import { SendWhatsappMessageBody } from "../types";
+import { WAHA_API_URL } from "./constants";
+import { WahaChattingSendMessageBody } from "./types";
 
-type MessageParameters = {
-  type: string;
-  text: string;
-};
-
-const WhatsappTemplate: Record<SendWhatsappMessageBody["type"], string> = {
-  "client-confirmation": "appointment_scheduled",
-  "professional-confirmation": "appointment_scheduled_professional",
-};
-
-const buildMessageBody = (
-  type: SendWhatsappMessageBody["type"],
-  content: SendWhatsappMessageBody["content"]
-): MessageParameters[] => {
+const buildMessageBody = (type: SendWhatsappMessageBody["type"], content: SendWhatsappMessageBody["content"]): string => {
   if (type === "client-confirmation") {
-    return [
-      {
-        type: "text",
-        text: content.salon,
-      },
-      {
-        type: "text",
-        text: content.date,
-      },
-      {
-        type: "text",
-        text: content.time,
-      },
-      {
-        type: "text",
-        text: content.service,
-      },
-      {
-        type: "text",
-        text: content.name,
-      },
-    ];
+    return `Olá ${content.name}, seu agendamento para ${content.date} às ${content.time} foi confirmado.\n\nObrigado por usar o Agenda Bela 😃`;
   }
 
-  return [
-    {
-      type: "text",
-      text: content.date,
-    },
-    {
-      type: "text",
-      text: content.time,
-    },
-    {
-      type: "text",
-      text: content.name,
-    },
-    {
-      type: "text",
-      text: content.service,
-    },
-  ];
+  return `Olá ${content.name}, seu agendamento para ${content.date} às ${content.time} foi confirmado.\n\nObrigado por usar o Agenda Bela 😃`;
 };
+
 
 const sendAppointmentConfirmation = async ({
   to,
   type,
   content,
 }: SendWhatsappMessageBody) => {
-  await axios.post(
-    `https://graph.facebook.com/v21.0/${process.env.WHATSAPP_NUMBER_ID}/messages`,
+  await axios.post<WahaChattingSendMessageBody>(
+    WAHA_API_URL.chatting.sendMessage,
     {
-      messaging_product: "whatsapp",
-      to: to,
-      type: "template",
-      template: {
-        name: WhatsappTemplate[type],
-        language: {
-          code: "pt_BR",
-        },
-        components: [
-          {
-            type: "body",
-            parameters: buildMessageBody(type, content),
-          },
-        ],
-      },
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${process.env.WHATSAPP_API_KEY}`,
-        "Content-Type": "application/json",
-      },
+      chatId: to,
+      reply_to: null,
+      text: buildMessageBody(type, content),
+      linkPreview: true,
+      linkPreviewHighQuality: false,
+      session: "default",
     }
   );
 };
