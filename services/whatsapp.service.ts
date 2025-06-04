@@ -26,6 +26,12 @@ const sendAppointmentConfirmation = async ({
       linkPreview: true,
       linkPreviewHighQuality: false,
       session: "default",
+    },
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "X-Api-Key": process.env.WAHA_API_KEY,
+      },
     }
   );
 };
