@@ -24,6 +24,7 @@ type SendWhatsappMessageContent = {
   date: string;
   time: string;
   service: string;
+  additionalInfo?: string;
 };
 
 export type SendWhatsappMessageBody = {
