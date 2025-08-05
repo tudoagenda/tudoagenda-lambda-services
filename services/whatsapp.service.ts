@@ -8,7 +8,7 @@ const buildMessageBody = (type: SendWhatsappMessageBody["type"], content: SendWh
     return `Olá ${content.name}, seu agendamento com ${content.salon} foi confirmado para ${content.date} às ${content.time}.\n\nObrigado por usar o Agenda Bela 😃💜`;
   }
 
-  return `Olá ${content.name}, você tem um novo agendamento: \n\n${content.additionalInfo} \n\nObrigado por usar o Agenda Bela 😃💜`;
+  return `Olá ${content.name}, você tem um novo agendamento: \n\nCliente: ${content.clientName}\nServiço: ${content.service}\nHorário: ${content.hour}\nData: ${content.date}\nTelefone: ${content?.phone ?? 'Não informado'}\n\nObrigado por usar o Agenda Bela 😃💜`;
 };
 
 
