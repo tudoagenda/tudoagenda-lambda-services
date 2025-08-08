@@ -4,11 +4,12 @@ import { WAHA_API_URL } from "./constants";
 import { WahaChattingSendMessageBody } from "./types";
 
 const buildMessageBody = (type: SendWhatsappMessageBody["type"], content: SendWhatsappMessageBody["content"]): string => {
-  if (type === 'client-confirmation') {
-    return `Olá ${content.name}, seu agendamento com ${content.salon} foi confirmado para ${content.date} às ${content.time}.\n\nObrigado por usar o Agenda Bela 😃💜`;
-  }
+  return `Olá! Passando pra avisar que o agendamento foi confirmado para ${content.date} às ${content.time}.\n\nObrigado por usar o Agenda Bela 😃💜`
+  // if (type === 'client-confirmation') {
+  //   return `Olá ${content.name}, seu agendamento com ${content.salon} foi confirmado para ${content.date} às ${content.time}.\n\nObrigado por usar o Agenda Bela 😃💜`;
+  // }
 
-  return `Olá ${content.name}, você tem um novo agendamento: \n\nCliente: ${content.clientName}\nServiço: ${content.service}\nHorário: ${content.time}\nData: ${content.date}\nTelefone: ${content?.phone ?? 'Não informado'}\n\nObrigado por usar o Agenda Bela 😃💜`;
+  // return `Olá ${content.name}, você tem um novo agendamento: \n\nCliente: ${content.clientName}\nServiço: ${content.service}\nHorário: ${content.time}\nData: ${content.date}\nTelefone: ${content?.phone ?? 'Não informado'}\n\nObrigado por usar o Agenda Bela 😃💜`;
 };
 
 
