@@ -53,6 +53,7 @@ export const handleCreateUserAndSend = async (
       body: JSON.stringify({
         message: "User created successfully",
         user: email,
+        temporaryPassword: password,
       }),
     };
   } catch (error) {
