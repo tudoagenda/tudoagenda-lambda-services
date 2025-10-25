@@ -1,5 +1,5 @@
 export const WAHA_API_BASE_URL =
-  "http://ec2-54-208-244-124.compute-1.amazonaws.com:3000";
+  "https://waha-plus-production-19cc.up.railway.app";
 
 export const WAHA_API_URL = {
   chatting: {
